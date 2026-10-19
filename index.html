@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ruang Publik Virtual dan Produksi Konten</title>
+<style>
+:root{--bg:#FBF6EC;--card:#fff;--ink:#1F2A44;--mut:#5b6478;--ter:#D9552B;--ok:#2F7D5B;--bl:#2E6FB7;--ye:#F2B632;--ln:#e3d9c4;box-sizing:border-box}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#171d30;--card:#222a42;--ink:#f3eee2;--mut:#aab2c8;--ter:#ff8a5c;--ok:#5fc596;--bl:#7fb2ee;--ye:#f2b632;--ln:#37405c}}
+*{box-sizing:border-box}html{font-size:16px}
+body{margin:0;background:var(--bg);color:var(--ink);font:1rem/1.5 system-ui,Segoe UI,Roboto,sans-serif}
+h1,h2,h3{font-family:Georgia,'Times New Roman',serif;margin:.2em 0}
+button,textarea{font:inherit;color:inherit}
+button{cursor:pointer;min-height:40px;min-width:40px;border:1px solid var(--ln);background:var(--card);border-radius:.6rem;padding:.3rem .7rem}
+button:hover{border-color:var(--ter)}button:focus-visible,textarea:focus-visible{outline:3px solid var(--bl);outline-offset:2px}
+header{position:sticky;top:0;z-index:20;background:var(--card);border-bottom:1px solid var(--ln);padding:env(safe-area-inset-top,0) .6rem 0}
+.hrow{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;padding:.4rem 0}
+.ttl{font-family:Georgia,serif;font-weight:700;flex:1 1 14rem;min-width:10rem}.ttl small{display:block;font:.75rem system-ui;color:var(--mut)}
+#pg{background:var(--ter);color:#fff;border-color:var(--ter);font-weight:700}
+#prog{height:5px;background:var(--ln)}#prog i{display:block;height:100%;width:0;background:var(--ter);transition:width .3s}
+.mono{font-family:ui-monospace,Consolas,monospace}
+#menu{position:absolute;right:.6rem;top:100%;background:var(--card);border:1px solid var(--ln);border-radius:.6rem;max-height:70vh;overflow:auto;width:min(26rem,94vw);display:none;box-shadow:0 8px 24px #0003}
+#menu button{display:flex;justify-content:space-between;width:100%;border:0;border-radius:0;text-align:left;gap:.5rem}
+main{max-width:70rem;margin:0 auto;padding:1rem 1rem 6rem}
+.pill{display:inline-block;font:.8rem ui-monospace,monospace;background:var(--ye);color:#1F2A44;border-radius:2rem;padding:.1rem .7rem}
+.lead{font-size:1.2rem;max-width:60rem}
+.bar{display:flex;gap:.5rem;flex-wrap:wrap;margin:.6rem 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:.9rem}
+.card{display:block;text-align:left;padding:1rem;background:var(--card);border:2px solid var(--ln);border-radius:1rem 1rem 1rem .2rem;font-size:1.1rem}
+.card b{display:block}.card i{display:block;color:var(--mut);font-size:.85rem;margin-top:.4rem}
+.card .a{display:none;margin-top:.5rem;padding:.5rem .7rem;border-left:4px solid var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent);border-radius:.3rem}
+.card.open{border-color:var(--ok)}.card.open .a{display:block}.card.open i{display:none}
+.tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin:.6rem 0}.tabs button.on{background:var(--bl);color:#fff;border-color:var(--bl)}
+.feed{background:var(--card);border:1px solid var(--ln);border-radius:1rem;padding:.8rem 1rem;margin:.6rem 0}
+ol.st li{margin:.5rem 0;font-size:1.15rem}
+.opt{display:grid;grid-template-columns:1fr auto;gap:.4rem .8rem;align-items:center;background:var(--card);border:2px solid var(--ln);border-radius:.8rem;padding:.6rem .8rem;margin:.5rem 0;font-size:1.1rem}
+.opt.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,var(--card))}.opt.no{opacity:.7}
+.opt .v{display:flex;align-items:center;gap:.4rem}.opt .bg{grid-column:1/3;height:8px;background:var(--ln);border-radius:4px;overflow:hidden}.opt .bg i{display:block;height:100%;background:var(--bl);width:0}
+.panel{position:fixed;z-index:30;background:var(--card);border:2px solid var(--ter);border-radius:1rem;padding:.8rem 1rem;max-height:60vh;overflow:auto;box-shadow:0 8px 24px #0004;display:none;font-size:.95rem}
+#pg-guru{right:.8rem;bottom:.8rem;width:min(26rem,92vw)}#pg-siswa{left:.8rem;bottom:.8rem;width:min(26rem,92vw);border-color:var(--bl)}
+.panel h3{font-size:1.05rem}.panel ul{margin:.2rem 0 .5rem 1.1rem;padding:0}.warn{color:var(--ter);font-size:.8rem}
+.modal{position:fixed;inset:0;background:#000a;z-index:40;display:none;align-items:center;justify-content:center;padding:1rem}
+.modal>div{background:var(--card);border-radius:1rem;padding:1.2rem;width:min(40rem,100%);max-height:90vh;overflow:auto}
+textarea{width:100%;min-height:6rem;background:var(--bg);border:1px solid var(--ln);border-radius:.5rem;padding:.5rem}
+#toast{position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:.6rem 1rem;border-radius:2rem;z-index:60;display:none}
+#blk{position:fixed;inset:0;background:#000;z-index:50;display:none}
+.big{font-size:1.6rem;font-family:Georgia,serif;margin:.5rem 0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style></head><body>
+<header>
+<div class="hrow">
+<div class="ttl"><span id="jd"></span><small id="tp"></small></div>
+<button id="bp" title="Sebelumnya (←)" aria-label="Sebelumnya">◀</button>
+<button id="pg" aria-label="Menu lompat slide"></button>
+<button id="bn" title="Berikutnya (→)" aria-label="Berikutnya">▶</button>
+<button id="tm" class="mono" aria-label="Mulai atau jeda timer">⏱ 00:00</button><button id="tr" title="Reset timer" aria-label="Reset timer">↺</button>
+<button id="b-n">📋 Guru</button><button id="b-q">🎯 Tanya</button><button id="b-s">✏️ Siswa</button>
+<button id="fm" aria-label="Perkecil teks">A−</button><button id="fp" aria-label="Perbesar teks">A+</button><button id="b-f" aria-label="Layar penuh">⛶</button>
+</div><div id="menu"></div><div id="prog"><i></i></div></header>
+<main id="stage" aria-live="polite"></main>
+
+<aside class="panel" id="pg-guru" aria-label="Catatan Guru"></aside>
+<aside class="panel" id="pg-siswa" aria-label="Catatan Siswa"></aside>
+
+<div class="modal" id="m-q"><div><h2>🎯 Tanya Siswa</h2>
+<p class="big" id="qt"></p><div class="bar"><button id="qg">Ganti pertanyaan</button></div><hr>
+<label for="nm"><b>Daftar nama</b> (satu nama per baris)</label><textarea id="nm"></textarea>
+<div class="bar"><button id="pk">🎲 Pilih siswa acak</button><button id="rs">Reset putaran</button><button class="cl">Tutup</button></div>
+<p class="big" id="pr" aria-live="polite">—</p><p id="pc"></p></div></div>
+
+<div class="modal" id="m-k"><div><h2>📚 Kumpulan catatan siswa</h2><textarea id="kt" style="min-height:18rem" readonly></textarea>
+<div class="bar"><button id="kc">Salin</button><a id="kd" download="catatan-pertemuan-9.txt"><button type="button">⬇ Unduh .txt</button></a><button class="cl">Tutup</button></div></div></div>
+<div id="blk"></div><div id="toast" role="status"></div>
+
+<script>
+// ===== DATA (edit di sini) =====
+const MATERI={judul:"Ruang Publik Virtual dan Produksi Konten",topik:"Informatika · Kelas IX · Pertemuan 9 · 3 JP",
+slides:[
+{judul:"Pembuka dan tujuan pembelajaran",menit:4,tipe:"cards",isi:{intro:"Ketuk untuk memunculkan tujuan satu per satu. Rujukan RPP: TP 2.8 dan TP 2.9.",items:[
+{q:"Tujuan 1",a:"Mengidentifikasi lima karakteristik ruang publik virtual (terbuka, tanpa batas ruang dan waktu, interaktif dua arah, jejak digital, aturan platform) beserta contohnya."},
+{q:"Tujuan 2",a:"Menjelaskan pengertian konten digital, membedakan peran konsumen dan produsen, serta mengklasifikasikan jenis konten (teks, gambar, audio, video, gabungan)."},
+{q:"Tujuan 3",a:"Menerapkan konsep pada contoh kasus: menunjuk karakteristik yang muncul, memberi alasan, dan menentukan peran konsumen atau produsen."}]},
+guru:{langkah:["Salam, doa, cek kehadiran.","Sampaikan tiga tujuan dan alur hari ini.","Diagnostik lisan ±3 menit: “Siapa yang pernah mengunggah foto atau video?”"],pemantik:["Siapa yang pernah mengunggah sesuatu di internet?"],miskonsepsi:"",luarMedia:"Salam, doa, dan cek kehadiran.",cek:true},
+siswa:{judul:"Tujuan hari ini",poin:["Mengenal 5 karakteristik ruang publik virtual.","Memahami konten digital dan jenisnya.","Menerapkannya pada contoh kasus."]}},
+{judul:"Apersepsi: jenis ruang publik virtual",menit:4,tipe:"cards",isi:{intro:"Ingat Pertemuan 8. Tebak dulu contoh platformnya, lalu buka.",items:[
+{q:"Media sosial",a:"Tempat berbagi unggahan dan berinteraksi. Contoh: Instagram, TikTok."},{q:"Forum",a:"Tempat berdiskusi dalam topik tertentu lewat utas."},{q:"Wiki",a:"Tempat banyak orang menyusun pengetahuan bersama. Contoh: Wikipedia."},{q:"Marketplace",a:"Tempat jual beli dan ulasan produk daring."},{q:"Platform streaming",a:"Tempat menonton atau mendengarkan siaran. Contoh: YouTube."}]},
+guru:{langkah:["Minta siswa menyebut contoh sebelum kartu dibuka.","Kaitkan dengan Pertemuan 8."],pemantik:["Platform apa yang kamu buka pagi ini?","Apa bedanya ruang publik virtual dengan chat pribadi?"],miskonsepsi:"Ruang publik virtual bukan sama dengan “internet” seluruhnya.",luarMedia:""},
+siswa:{judul:"Ruang publik virtual",poin:["Ruang publik virtual: tempat di dunia digital yang bisa dimasuki banyak orang untuk berkumpul, berkomunikasi, dan berbagi.","Contoh: media sosial, forum, wiki, marketplace, platform streaming."]}},
+{judul:"Dua contoh kontras: alun-alun dan kolom komentar",menit:7,tipe:"cards",isi:{intro:"🏞️ Alun-alun kota  ↔  📱 Kolom komentar video populer. Belum ada istilah teknis.",items:[
+{q:"Apa persamaannya?",a:"Sama-sama tempat umum yang bisa dihadiri banyak orang untuk bertemu dan berinteraksi."},
+{q:"Apa perbedaannya?",a:"Tempat: harus datang langsung vs dari mana saja. Waktu: terbatas jam buka vs kapan saja. Yang melihat: yang kebetulan hadir vs ribuan sampai jutaan orang. Omongan: lewat begitu saja vs tersimpan."},
+{q:"Siapa yang pernah mengunggah sesuatu?",a:"Hampir semua pernah. Setiap unggahan adalah konten digital (dibahas di slide 6)."}]},
+guru:{langkah:["Tampilkan dua contoh, tahan istilah teknis.","Tanya-jawab berjenjang dari pengalaman siswa.","Catat jawaban siswa di papan."],pemantik:["Apa persamaan dan perbedaan keduanya?","Siapa yang pernah mengunggah sesuatu di internet?"],miskonsepsi:"",luarMedia:"Kartu contoh cetak atau tangkapan layar bila diperlukan."},
+siswa:{judul:"Alun-alun vs ruang publik virtual",poin:["Alun-alun: harus datang, jam terbatas, yang melihat orang yang ada di sana, omongan lewat begitu saja.","Ruang publik virtual: dari mana saja, kapan saja, bisa dilihat ribuan orang, bisa tersimpan."]}},
+{judul:"Lima karakteristik ruang publik virtual (TTIJA)",menit:10,tipe:"cards",isi:{intro:"Singkatan TTIJA: Terbuka, Tanpa batas, Interaktif, Jejak digital, Aturan platform.",items:[
+{q:"1. Terbuka 🌍",a:"Siapa saja yang punya perangkat dan internet bisa masuk dan melihat unggahan publik."},{q:"2. Tanpa batas ruang dan waktu ⏰",a:"Berbeda pulau pun tetap bisa mengobrol, dan ruang ini “buka” jam 2 pagi."},{q:"3. Interaktif dua arah 🔄",a:"Bisa melihat sekaligus merespons: suka, komentar, bagikan, balas."},{q:"4. Jejak digital 👣",a:"Unggahan dan komentar bisa tersimpan. Yang dihapus pun masih mungkin tersimpan lewat tangkapan layar."},{q:"5. Aturan platform 📜",a:"Tiap platform punya aturan. Konten melanggar bisa dihapus dan akun bisa dibatasi."}]},
+guru:{langkah:["Pancing tiap ciri dari jawaban siswa di slide 3.","Think-pair-share: tiap pasangan beri satu contoh nyata per ciri.","Perkenalkan TTIJA."],pemantik:["Siapa saja yang bisa membaca komentarmu?","Apa yang terjadi bila unggahan dihapus?"],miskonsepsi:"Dihapus tidak berarti pasti hilang. Rubrik menggabungkan ciri 1 dan 2 dalam satu sub-komponen.",luarMedia:"Think-pair-share berpasangan."},
+siswa:{judul:"5 karakteristik (TTIJA)",poin:["Terbuka: banyak orang bisa mengakses.","Tanpa batas ruang dan waktu.","Interaktif dua arah: melihat dan merespons.","Jejak digital: unggahan bisa tersimpan.","Aturan platform: ada aturan main dan sanksi."]}},
+{judul:"Cocokkan contoh dengan karakteristiknya",menit:7,tipe:"cards",isi:{intro:"Ketuk kalimat untuk melihat karakteristik yang muncul.",items:[
+{q:"Rina di Makassar berkomentar pukul 2 pagi dan temannya di Surabaya membalas.",a:"Tanpa batas ruang dan waktu (juga interaktif dua arah)."},{q:"Video yang diunggah dua tahun lalu masih bisa ditonton.",a:"Jejak digital."},{q:"Pembuat video membalas komentar penonton.",a:"Interaktif dua arah."},{q:"Siapa pun yang punya internet bisa membuka kanal itu.",a:"Terbuka."},{q:"Unggahan dihapus karena melanggar ketentuan komunitas.",a:"Aturan platform."}]},
+guru:{langkah:["Baca kalimat, minta siswa menebak.","Terima lebih dari satu ciri bila alasannya masuk akal."],pemantik:["Ciri apa yang paling terlihat?"],miskonsepsi:"",luarMedia:"",cek:true},
+siswa:{judul:"Latihan mengenali ciri",poin:["Tanya diri: siapa yang bisa melihat? kapan? bisa membalas? tersimpan? ada aturan?"]}},
+{judul:"Konten digital: konsumen dan produsen",menit:8,tipe:"cards",isi:{intro:"Konten digital: segala sesuatu yang dibuat dan disimpan secara digital, lalu bisa dilihat, didengar, atau dibaca orang lain. Aku sebagai apa?",items:[
+{q:"Dina menonton video tutorial.",a:"👀 Konsumen konten."},{q:"Dina menulis komentar di video itu.",a:"✍️ Produsen konten (teks)."},{q:"Budi mendengarkan podcast.",a:"👀 Konsumen konten."},{q:"Budi merekam voice note dan mengunggahnya.",a:"✍️ Produsen konten (audio)."}]},
+guru:{langkah:["Definisikan konten digital dengan contoh galeri ponsel.","Bedakan konsumen dan produsen.","Tekankan: hampir semua siswa adalah keduanya."],pemantik:["Kapan kamu terakhir jadi produsen konten?"],miskonsepsi:"Konten digital tidak hanya video atau foto.",luarMedia:""},
+siswa:{judul:"Konten digital",poin:["Konten digital: segala sesuatu berbentuk teks, gambar, audio, video, atau gabungannya yang dibuat dan disimpan secara digital.","Konsumen konten: yang menikmati. Produsen konten: yang membuat dan mengunggah."]}},
+{judul:"Jenis konten digital",menit:10,tipe:"tabs",isi:{tabs:[
+{n:"📝 Teks",intro:"Konten berupa tulisan.",items:[{q:"Contoh",a:"Status, caption, komentar, artikel blog, thread."}]},
+{n:"🖼️ Gambar",intro:"Konten visual diam.",items:[{q:"Contoh",a:"Foto, poster, meme, infografis, stiker."}]},
+{n:"🎧 Audio",intro:"Konten berupa suara.",items:[{q:"Contoh",a:"Podcast, voice note, lagu, rekaman suara."}]},
+{n:"🎬 Video",intro:"Gambar bergerak, biasanya plus suara.",items:[{q:"Contoh",a:"Video pendek, vlog, siaran langsung, tutorial."}]},
+{n:"🧩 Gabungan",intro:"Campuran beberapa jenis.",items:[{q:"Contoh",a:"Foto + caption + musik; video dengan teks dan lagu."}]}]},
+guru:{langkah:["Buka tab satu per satu, minta siswa menambah contoh.","Tutup dengan tab Gabungan: satu unggahan bisa banyak jenis."],pemantik:["Video pendek terdiri dari jenis apa saja?","Contoh audio apa yang kamu dengar kemarin?"],miskonsepsi:"Konten digital bukan hanya video.",luarMedia:""},
+siswa:{judul:"Jenis konten digital",poin:["Teks: status, caption, komentar.","Gambar: foto, poster, meme.","Audio: podcast, voice note, lagu.","Video: vlog, video pendek, siaran langsung.","Gabungan: campuran beberapa jenis."]}},
+{judul:"Panduan LKPD individu",menit:10,tipe:"info",isi:{html:"<p class='lead'>Kerjakan <b>Lembar Isian Terpandu: Karakteristik ruang publik virtual</b> secara mandiri.</p><ol class='st'><li>Isi karakteristik ruang publik virtual beserta contohnya.</li><li>Analisis kasus singkat: tunjuk karakteristik dan beri alasan.</li><li>Klasifikasikan contoh konten ke dalam jenisnya, lalu tulis contoh dari kehidupanmu.</li><li>Isi refleksi: yang sudah dipahami, yang masih bingung, yang paling menarik.</li></ol>"},
+guru:{langkah:["Bagikan LKPD (kertas atau perangkat).","Berkeliling, beri umpan balik langsung.","Isi daftar cek rubrik 3B."],pemantik:["Bagian mana yang paling sulit?"],miskonsepsi:"",luarMedia:"Pengerjaan LKPD, guru berkeliling mengisi daftar cek rubrik."},
+siswa:{judul:"Langkah LKPD",poin:["Isi ciri + contoh, analisis kasus, klasifikasi konten, lalu refleksi."]}},
+{judul:"Bedah kasus",menit:15,tipe:"tabs",isi:{tabs:[
+{n:"Kasus 1: Rani",intro:"Rani menulis komentar “Resepnya enak, sudah aku coba!” di video memasak viral. Pembuat video membalas dan puluhan orang menyukainya.",items:[{q:"Karakteristik apa?",a:"Terbuka, interaktif dua arah, jejak digital."},{q:"Rani sebagai apa?",a:"Menonton: konsumen. Menulis komentar (teks): produsen."}]},
+{n:"Kasus 2: Dimas",intro:"Dimas mengunggah foto sore hari dengan lagu dan tulisan “Sore yang tenang” ke status WhatsApp. Kontaknya melihat dan membalas emoji.",items:[{q:"Jenis kontennya?",a:"🧩 Gabungan: gambar + audio + teks."},{q:"Ruang publik virtual atau bukan? (kasus abu-abu)",a:"Hanya kontak tertentu yang melihat, tetapi ada interaksi dan jejak digital (bisa ditangkap layar). “Privat” belum tentu 100% aman. Diskusikan bersama."}]},
+{n:"Kasus 3: Raka",intro:"Raka menyiarkan langsung permainan gim ke banyak penonton yang mengetik komentar saat itu juga.",items:[{q:"Karakteristik apa?",a:"Terbuka, tanpa batas ruang, interaktif dua arah."},{q:"Jenis konten dan peran?",a:"Video (siaran langsung), Raka produsen, penonton konsumen (komentar mereka: produsen teks)."}]},
+{n:"Kasus 4: Tiara",intro:"Tiara mengunggah meme di grup kelas, lalu seseorang menangkap layarnya dan menyebarkannya ke media sosial.",items:[{q:"Karakteristik apa?",a:"Jejak digital: unggahan bisa disalin dan tersebar."},{q:"Jenis konten dan peran?",a:"Gambar, Tiara produsen."}]}]},
+guru:{langkah:["Pilih tab kasus, minta tebak sebelum membuka.","Kasus Dimas: biarkan siswa berdebat.","Pakai pertanyaan scaffolding: apa yang terlihat orang lain? siapa yang membuat?"],pemantik:["Siapa yang bisa melihat unggahan ini?","Siapa produsen, siapa konsumen?"],miskonsepsi:"Privat belum tentu aman: tangkapan layar bisa menyebar.",luarMedia:"Kartu kasus cetak untuk kerja pasangan bila perlu.",cek:true},
+siswa:{judul:"Cara membedah kasus",poin:["Tanya: apa yang terlihat orang lain? siapa yang membuat? siapa yang hanya melihat?","Chat/status terbatas pun tetap meninggalkan jejak digital."]}},
+{judul:"Klasifikasi contoh konten",menit:10,tipe:"cards",isi:{intro:"Tebak jenis kontennya, lalu buka.",items:[
+{q:"Status “Sore yang tenang”",a:"📝 Teks"},{q:"Foto selfie",a:"🖼️ Gambar"},{q:"Stiker lucu",a:"🖼️ Gambar"},{q:"Voice note",a:"🎧 Audio"},{q:"Podcast sekolah",a:"🎧 Audio"},{q:"Video pendek",a:"🎬 Video"},{q:"Siaran langsung",a:"🎬 Video"},{q:"Foto + caption + musik",a:"🧩 Gabungan"}]},
+guru:{langkah:["Siswa menebak berpasangan sebelum kartu dibuka.","Jika ada jawaban ganda, bahas alasannya."],pemantik:["Mana contoh yang paling sering kamu buat?"],miskonsepsi:"Stiker bisa dianggap teks. Ia termasuk gambar.",luarMedia:"",cek:true},
+siswa:{judul:"Klasifikasi",poin:["Tulis contohmu sendiri untuk tiap jenis konten."]}},
+{judul:"Refleksi dan meluruskan miskonsepsi",menit:20,tipe:"cards",isi:{intro:"Benar atau keliru? Buka untuk melihat alasannya.",items:[
+{q:"“Ruang publik virtual sama dengan internet seluruhnya.”",a:"❌ Keliru. Ruang publik virtual adalah tempat tertentu di dunia digital untuk berkumpul dan berbagi."},{q:"“Konten digital hanya berarti video atau foto.”",a:"❌ Keliru. Ada teks, audio, dan gabungan."},{q:"“Postingan yang sudah dihapus pasti tidak bisa dilihat lagi.”",a:"❌ Keliru. Bisa tersimpan lewat tangkapan layar."},{q:"“Satu unggahan bisa terdiri dari beberapa jenis konten.”",a:"✅ Benar (jebakan). Contohnya video dengan teks dan lagu."}]},
+guru:{langkah:["Siswa mengisi refleksi di LKPD (±5 menit).","Beberapa siswa berbagi satu temuan.","Luruskan 2–3 miskonsepsi lewat kartu."],pemantik:["Apa yang sudah kamu pahami, apa yang masih bingung?","Apa yang paling menarik hari ini?"],miskonsepsi:"Satu kartu sengaja benar agar siswa tidak asal menjawab “keliru”.",luarMedia:"Refleksi tertulis di LKPD dan berbagi sukarela.",cek:true},
+siswa:{judul:"Meluruskan konsep",poin:["Ruang publik virtual ≠ seluruh internet.","Konten digital bukan hanya video atau foto.","Yang dihapus belum tentu hilang."]}},
+{judul:"Kuis cek ombak",menit:7,tipe:"quiz",isi:{},
+guru:{langkah:["Baca soal, siswa angkat tangan per opsi, ketuk + sesuai jumlah tangan.","Klik “Buka jawaban”, bahas penjelasan."],pemantik:["Mengapa kamu memilih jawaban itu?"],miskonsepsi:"",luarMedia:"",cek:true},siswa:null},
+{judul:"Rangkuman dan tiket keluar",menit:5,tipe:"ticket",isi:{},
+guru:{langkah:["Simpulan dengan kata-kata siswa.","Munculkan tiket keluar satu per satu, jawab lisan.","Beri apresiasi spesifik."],pemantik:["Apa satu hal yang kamu bawa pulang?"],miskonsepsi:"",luarMedia:"",cek:true},
+siswa:{judul:"Rangkuman",poin:["Ruang publik virtual punya 5 ciri: TTIJA.","Konten digital: teks, gambar, audio, video, gabungan.","Konsumen menikmati, produsen membuat dan mengunggah."]}},
+{judul:"Tugas keluarga dan pratinjau Pertemuan 10",menit:3,tipe:"info",isi:{html:"<p class='lead'>🕵️ <b>Misi detektif konten:</b> cari 3 contoh konten yang pernah kamu buat atau bagikan: jenisnya, di mana diunggah, siapa yang bisa melihat.</p><p class='lead'>👨‍👩‍👧 <b>Tanya keluarga</b> (opsional): konten apa yang pernah mereka buat atau unggah?</p><p class='lead'>➡️ <b>Pertemuan 10:</b> alat produksi konten.</p><div class='bar'><button data-act='kum'>📚 Kumpulan catatan siswa</button></div>"},
+guru:{langkah:["Beri tugas opsional.","Pratinjau Pertemuan 10.","Buka Kumpulan catatan agar siswa bisa menyalin."],pemantik:[],miskonsepsi:"",luarMedia:"Doa dan salam penutup.",cek:false},
+siswa:{judul:"Tugas",poin:["Cari 3 contoh konten milikmu dan catat jenis, tempat unggah, dan siapa yang bisa melihat."]}}
+],
+kuis:[
+{q:"Zahra merekam cerita sekolah lalu mengunggahnya sebagai podcast. Jenis konten dan perannya?",o:["Audio, produsen","Video, konsumen","Teks, produsen","Audio, konsumen"],p:"Podcast berupa suara (audio), dan Zahra yang membuat serta mengunggah, jadi produsen."},
+{q:"Seseorang berkomentar pukul 3 pagi dan dibalas orang dari kota lain. Dua karakteristik yang terlihat?",o:["Tanpa batas ruang dan waktu, interaktif dua arah","Terbuka, aturan platform","Jejak digital, aturan platform","Hanya interaktif dua arah"],p:"Jam 3 pagi dan beda kota menunjukkan tanpa batas ruang dan waktu; balasan menunjukkan interaksi dua arah."},
+{q:"“Kalau postingan sudah dihapus, pasti tidak ada yang bisa melihatnya lagi.” Pernyataan ini…",o:["Salah, masih mungkin tersimpan lewat tangkapan layar","Benar, pasti hilang","Benar, semua salinan dihapus platform","Salah, hanya admin yang bisa menghapus"],p:"Ini terkait jejak digital: orang lain bisa menyimpan salinannya."},
+{q:"Video pendek berisi gambar bergerak, suara, dan teks termasuk jenis…",o:["Gabungan","Teks","Audio","Gambar"],p:"Campuran beberapa jenis disebut konten gabungan."},
+{q:"Orang yang membuat dan mengunggah konten disebut…",o:["Produsen konten","Konsumen konten","Platform","Jejak digital"],p:"Produsen membuat dan mengunggah; konsumen menikmati."}],
+tiket:["Sebutkan dua karakteristik ruang publik virtual dan satu contohnya.","Sebutkan satu konten digital yang pernah kamu buat dan jenisnya.","Apa perbedaan konsumen dan produsen konten?"]};
+// ===== KODE =====
+(function(){
+const $=s=>document.querySelector(s),S=MATERI.slides,N=S.length;
+const E=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let cur=0,fs=16,sec=0,tint=null,tabi=0,sp=0,lastQ=-1,pool=[],picked=[],qs=[],QS,TS;
+const toast=m=>{const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display='none',2600)};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+function clip(t){const fb=()=>{try{const x=document.createElement('textarea');x.value=t;x.style.cssText='position:fixed;opacity:0';document.body.appendChild(x);x.select();const ok=document.execCommand('copy');x.remove();toast(ok?'Tersalin ✓':'Salin manual: blok teks lalu Ctrl+C')}catch(e){toast('Salin manual: blok teks lalu Ctrl+C')}};
+ if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(()=>toast('Tersalin ✓'),fb);else fb()}
+const mm=s=>String(s/60|0).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+function cards(it){return `<div class="bar"><button data-act="a1">Buka semua</button><button data-act="a0">Tutup semua</button></div><div class="grid">`+it.map(x=>`<button class="card" aria-expanded="false"><b>${E(x.q)}</b><i>Ketuk untuk membuka jawaban</i><span class="a">${E(x.a)}</span></button>`).join('')+`</div>`}
+function initQuiz(){QS={i:0,votes:[],open:false,res:[],done:false};qs=MATERI.kuis.map(q=>({q:q.q,p:q.p,o:shuffle(q.o.map((t,k)=>({t,ok:k===0})))}))}
+function initTicket(){TS=0}
+function quiz(){const k=QS;
+ if(k.done){return `<h2>Rekap cek ombak</h2>`+k.res.map((r,i)=>`<div class="feed"><b>Soal ${i+1}:</b> ${r==null?'tidak ada data suara':Math.round(r)+'% benar'+(r<50?' — ⚠️ perlu dibahas ulang':' ✓')}</div>`).join('')+`<div class="bar"><button data-act="qr">Ulangi kuis</button></div>`}
+ const q=qs[k.i],v=k.votes[k.i]||(k.votes[k.i]=q.o.map(()=>0)),tot=v.reduce((a,b)=>a+b,0);
+ return `<p class="pill">Soal ${k.i+1} dari ${qs.length}</p><p class="big">${E(q.q)}</p>`+q.o.map((o,j)=>`<div class="opt ${k.open?(o.ok?'ok':'no'):''}"><span>${'ABCD'[j]}. ${E(o.t)} ${k.open&&o.ok?'✅ benar':''}</span><span class="v"><button data-act="vm" data-j="${j}" ${k.open?'disabled':''} aria-label="kurangi">−</button><b>${v[j]}</b><button data-act="vp" data-j="${j}" ${k.open?'disabled':''} aria-label="tambah">+</button></span><span class="bg"><i style="width:${tot?v[j]/tot*100:0}%"></i></span></div>`).join('')+
+ (k.open?`<div class="feed">💡 ${E(q.p)}<br>${tot?Math.round(k.res[k.i])+'% kelas menjawab benar.':'Tidak ada data suara.'}</div><div class="bar"><button data-act="qn">${k.i<qs.length-1?'Soal berikutnya ▶':'Lihat rekap'}</button></div>`:`<div class="bar"><button data-act="qo">Buka jawaban</button></div>`)}
+function ticket(){const t=MATERI.tiket;return `<p class="lead">Rangkuman: TTIJA, lima jenis konten, konsumen dan produsen.</p><p class="pill">Tiket keluar ${Math.min(TS+1,t.length)} dari ${t.length}</p><p class="big">${TS<t.length?E(t[TS]):'Selesai. Terima kasih! 🎉'}</p><div class="bar">${TS<t.length?'<button data-act="tn">Pertanyaan berikutnya ▶</button>':''}<button data-act="tr2">Ulangi</button></div>`}
+function render(){const s=S[cur],x=s.isi;let h=`<h2>${cur+1}. ${E(s.judul)}</h2><p><span class="pill">${s.menit} menit</span></p>`;
+ if(s.tipe==='cards')h+=`<p class="lead">${E(x.intro)}</p>`+cards(x.items);
+ else if(s.tipe==='tabs'){const t=x.tabs[tabi];h+=`<div class="tabs">${x.tabs.map((a,i)=>`<button class="${i===tabi?'on':''}" data-act="tab" data-i="${i}">${E(a.n)}</button>`).join('')}</div><p class="lead">${E(t.intro)}</p>`+cards(t.items)}
+ else if(s.tipe==='info')h+=x.html;else if(s.tipe==='quiz')h+=quiz();else h+=ticket();
+ $('#stage').innerHTML=h;
+ $('#pg').textContent=`Slide ${cur+1} / ${N}`;$('#prog i').style.width=((cur+1)/N*100)+'%';panels()}
+function panels(){const s=S[cur],g=s.guru;
+ const li=a=>a&&a.length?'<ul>'+a.map(t=>`<li>${E(t)}</li>`).join('')+'</ul>':'';
+ $('#pg-guru').innerHTML=`<h3>📋 ${E(s.judul)}</h3><p>⏱ ${s.menit} menit · total ${S.reduce((a,b)=>a+b.menit,0)} menit</p>${g.cek?'<p class="warn">⚠️ Isi dikembangkan Claude, perlu diperiksa guru.</p>':''}<b>Yang dilakukan guru</b>${li(g.langkah)}${g.pemantik.length?'<b>Pertanyaan pemantik</b>'+li(g.pemantik):''}${g.miskonsepsi?'<b>Waspadai miskonsepsi</b><p>'+E(g.miskonsepsi)+'</p>':''}${g.luarMedia?'<b>Kegiatan di luar media</b><p>'+E(g.luarMedia)+'</p>':''}`;
+ const n=s.siswa;
+ $('#pg-siswa').innerHTML=n?`<h3>✏️ ${E(n.judul)}</h3><ul>${n.poin.slice(0,sp).map(t=>`<li>${E(t)}</li>`).join('')}</ul><p>${sp} dari ${n.poin.length} poin</p><div class="bar"><button data-act="sn">Munculkan poin berikutnya</button><button data-act="sa">Tampilkan semua</button><button data-act="sc">Salin catatan</button></div>`:`<h3>✏️ Catatan Siswa</h3><p>Slide ini murni aktivitas, tanpa catatan.</p>`}
+function go(n){n=Math.max(0,Math.min(N-1,n));if(n!==cur){cur=n;tabi=0;sp=0;if(S[cur].tipe==='quiz')initQuiz();if(S[cur].tipe==='ticket')initTicket();try{localStorage.setItem('m9pos',cur)}catch(e){}}render();$('#menu').style.display='none'}
+function tog(id){const p=$(id),on=p.style.display==='block';p.style.display=on?'none':'block'}
+function closeAll(){document.querySelectorAll('.panel,.modal,#menu,#blk').forEach(e=>e.style.display='none')}
+function allNotes(){return MATERI.judul+'\nCatatan Siswa\n\n'+S.filter(s=>s.siswa).map((s,i)=>s.siswa.judul+'\n'+s.siswa.poin.map(p=>'- '+p).join('\n')).join('\n\n')}
+function openK(){const t=allNotes();$('#kt').value=t;try{$('#kd').href=URL.createObjectURL(new Blob([t],{type:'text/plain'}))}catch(e){toast('Unduhan diblokir, gunakan Salin')}$('#m-k').style.display='flex'}
+function newQ(){const q=S[cur].guru.pemantik;if(!q.length){$('#qt').textContent='Slide ini tidak punya pertanyaan pemantik.';return}let i;do{i=Math.random()*q.length|0}while(q.length>1&&i===lastQ);lastQ=i;$('#qt').textContent=q[i]}
+function names(){return $('#nm').value.split('\n').map(t=>t.trim()).filter(Boolean)}
+function cnt(){$('#pc').textContent=picked.length+' dari '+names().length+' sudah terpilih'}
+function pick(){const a=names();if(!a.length){toast('Isi daftar nama dulu');return}try{localStorage.setItem('m9names',$('#nm').value)}catch(e){}
+ picked=picked.filter(n=>a.includes(n));if(picked.length>=a.length){picked=[];toast('Semua sudah terpilih, putaran baru dimulai')}
+ const left=a.filter(n=>!picked.includes(n)),res=left[Math.random()*left.length|0],t0=Date.now(),r=$('#pr');
+ const iv=setInterval(()=>{r.textContent=a[Math.random()*a.length|0];if(Date.now()-t0>800){clearInterval(iv);r.textContent='🎉 '+res;picked.push(res);cnt()}},70)}
+function setFs(d){fs=Math.max(13,Math.min(22,fs+d));document.documentElement.style.fontSize=fs+'px'}
+function tim(){if(tint){clearInterval(tint);tint=null}else tint=setInterval(()=>{sec++;$('#tm').textContent='⏱ '+mm(sec)},1000)}
+function act(e){const b=e.target.closest('button');if(!b)return;
+ if(b.classList.contains('card')){const o=b.classList.toggle('open');b.setAttribute('aria-expanded',o);return}
+ const a=b.dataset.act;if(!a)return;const k=QS;
+ if(a==='a1'||a==='a0')document.querySelectorAll('.card').forEach(c=>{c.classList.toggle('open',a==='a1');c.setAttribute('aria-expanded',a==='a1')});
+ else if(a==='tab'){tabi=+b.dataset.i;render()}
+ else if(a==='kum')openK();
+ else if(a==='vp'||a==='vm'){const v=k.votes[k.i],j=+b.dataset.j;v[j]=Math.max(0,v[j]+(a==='vp'?1:-1));render()}
+ else if(a==='qo'){const v=k.votes[k.i],tot=v.reduce((x,y)=>x+y,0),ok=qs[k.i].o.findIndex(o=>o.ok);k.open=true;k.res[k.i]=tot?v[ok]/tot*100:null;if(tot&&k.res[k.i]>=50&&window.confetti){try{confetti({particleCount:120,spread:70,origin:{y:.7}})}catch(x){}}render()}
+ else if(a==='qn'){k.open=false;if(k.i<qs.length-1)k.i++;else k.done=true;render()}
+ else if(a==='qr'){initQuiz();render()}
+ else if(a==='tn'){TS++;render()}else if(a==='tr2'){TS=0;render()}
+ else if(a==='sn'){sp=Math.min(S[cur].siswa.poin.length,sp+1);panels()}
+ else if(a==='sa'){sp=S[cur].siswa.poin.length;panels()}
+ else if(a==='sc'){const n=S[cur].siswa;clip(n.judul+'\n'+n.poin.map(p=>'- '+p).join('\n'))}}
+$('#stage').addEventListener('click',act);$('#pg-siswa').addEventListener('click',act);
+$('#jd').textContent=MATERI.judul;$('#tp').textContent=MATERI.topik;
+$('#bp').onclick=()=>go(cur-1);$('#bn').onclick=()=>go(cur+1);
+$('#pg').onclick=()=>{const m=$('#menu');m.innerHTML=S.map((s,i)=>`<button data-i="${i}"><span>${i+1}. ${E(s.judul)}</span><span>${s.menit}′</span></button>`).join('');m.style.display=m.style.display==='block'?'none':'block'};
+$('#menu').onclick=e=>{const b=e.target.closest('button');if(b)go(+b.dataset.i)};
+$('#tm').onclick=tim;$('#tr').onclick=()=>{clearInterval(tint);tint=null;sec=0;$('#tm').textContent='⏱ 00:00'};
+$('#b-n').onclick=()=>tog('#pg-guru');$('#b-s').onclick=()=>tog('#pg-siswa');
+$('#b-q').onclick=()=>{newQ();cnt();$('#m-q').style.display='flex'};
+$('#qg').onclick=newQ;$('#pk').onclick=pick;$('#rs').onclick=()=>{picked=[];$('#pr').textContent='—';cnt();toast('Putaran direset')};
+$('#fm').onclick=()=>setFs(-1);$('#fp').onclick=()=>setFs(1);
+function full(){try{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen().catch(()=>toast('Layar penuh tidak tersedia'))}catch(e){toast('Layar penuh tidak tersedia')}}
+$('#b-f').onclick=full;$('#kc').onclick=()=>clip($('#kt').value);
+document.querySelectorAll('.cl').forEach(b=>b.onclick=closeAll);
+document.addEventListener('keydown',e=>{const t=e.target.tagName;if(/INPUT|TEXTAREA|SELECT/.test(t)||e.ctrlKey||e.metaKey||e.altKey)return;const k=e.key;
+ if(k==='ArrowRight'||k==='PageDown')go(cur+1);else if(k==='ArrowLeft'||k==='PageUp')go(cur-1);
+ else if(k==='Home')go(0);else if(k==='End')go(N-1);
+ else if(k==='n'||k==='N')tog('#pg-guru');else if(k==='s'||k==='S')tog('#pg-siswa');
+ else if(k==='q'||k==='Q')$('#b-q').click();else if(k==='f'||k==='F')full();
+ else if(k==='b'||k==='B'){const x=$('#blk');x.style.display=x.style.display==='block'?'none':'block'}
+ else if(k==='Escape')closeAll();
+ else if(k==='Enter'&&$('#pg-siswa').style.display==='block'&&S[cur].siswa){e.preventDefault();sp=Math.min(S[cur].siswa.poin.length,sp+1);panels()}});
+try{$('#nm').value=localStorage.getItem('m9names')||'';const p=+localStorage.getItem('m9pos');if(p>0&&p<N)cur=p}catch(e){}
+if(S[cur].tipe==='quiz')initQuiz();else initQuiz();
+initTicket();render();
+})();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.6.0/confetti.browser.min.js"></script>
+</body></html>
